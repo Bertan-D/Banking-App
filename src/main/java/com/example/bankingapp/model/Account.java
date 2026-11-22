@@ -1,15 +1,13 @@
 package com.example.bankingapp.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
 
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.UUID;
 
+@Entity
 @Getter
 @Setter
 @AllArgsConstructor
