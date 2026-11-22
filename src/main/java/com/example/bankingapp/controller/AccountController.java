@@ -40,9 +40,6 @@ public class AccountController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Account> getById(@PathVariable UUID id) {
-        if(accountService.getById(id) == null)
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-
         return ResponseEntity.ok(accountService.getById(id));
     }
 
@@ -54,9 +51,6 @@ public class AccountController {
     @GetMapping("/{id}/transfers")
     public ArrayList<Transfer> getTransfersByAccountId(@PathVariable UUID id) {
         Account account = accountService.getById(id);
-        if(account == null)
-            return null;
-
         return transferService.getAllForAccount(account);
     }
 
