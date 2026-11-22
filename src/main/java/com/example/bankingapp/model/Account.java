@@ -1,25 +1,29 @@
 package com.example.bankingapp.model;
 
 import jakarta.persistence.Column;
-import lombok.Data;
-import lombok.NonNull;
-import org.hibernate.annotations.Collate;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import lombok.*;
 
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.UUID;
 
-@Data
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class Account {
-    @NonNull
+    @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
-    @NonNull
+    @Column(nullable = false)
     private String iban;
-    @NonNull
+    @Column(nullable = false)
     private String holderName;
-    @NonNull
     @Column(nullable = false, precision = 19, scale = 2)
     private BigDecimal balance;
-    @NonNull
+    @Column(nullable = false)
     private Date openDate;
 }

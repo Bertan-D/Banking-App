@@ -1,24 +1,28 @@
 package com.example.bankingapp.model;
 
-import lombok.Data;
-import lombok.NonNull;
+import jakarta.persistence.*;
+import lombok.*;
 
 import java.math.BigDecimal;
 import java.time.ZonedDateTime;
 import java.util.UUID;
 
-@Data
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class Transfer {
-    @NonNull
+    @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
-    @NonNull
+    @ManyToOne(optional = false)
     private Account source;
-    @NonNull
+    @ManyToOne(optional = false)
     private Account target;
-    @NonNull
+    @Column(nullable = false)
     private BigDecimal amount;
-    @NonNull
+    @Column(nullable = false)
     private String usage;
-    @NonNull
+    @Column(nullable = false)
     private ZonedDateTime timestamp;
 }

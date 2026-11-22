@@ -1,5 +1,6 @@
 package com.example.bankingapp.controller;
 
+import com.example.bankingapp.dto.AccountDTO;
 import com.example.bankingapp.model.Account;
 import com.example.bankingapp.model.Transfer;
 import com.example.bankingapp.service.AccountService;
@@ -7,15 +8,15 @@ import com.example.bankingapp.service.TransferService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
-@Controller
+@RestController
 @RequestMapping("/accounts")
 public class AccountController {
 
@@ -29,13 +30,12 @@ public class AccountController {
 
     @PostMapping(consumes = "application/json", produces = "application/json")
     @ResponseBody
-    public ResponseEntity<Account> create(@Valid Account account) {
-
-        if(account.getBalance().compareTo(BigDecimal.ZERO) < 0)
+    public ResponseEntity<Account> create(@Valid AccountDTO accountDto) {
+        if(accountDto.balance().compareTo(BigDecimal.ZERO) < 0)
             return new ResponseEntity<>(HttpStatus.CONFLICT);
 
-        Account created = accountService.createAccount(account);
-        return ResponseEntity.created(URI.create("/books/" + created.getId())).body(created);
+        Account created = accountService.createAccount(accountDto);
+        return ResponseEntity.created(URI.create("/accounts/" + created.getId())).body(created);
     }
 
     @GetMapping("/{id}")
@@ -47,7 +47,7 @@ public class AccountController {
     }
 
     @GetMapping
-    public ArrayList<Account> getAll() {
+    public List<Account> getAll() {
         return accountService.getAll();
     }
 
