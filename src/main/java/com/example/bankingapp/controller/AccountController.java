@@ -1,0 +1,63 @@
+package com.example.bankingapp.controller;
+
+import com.example.bankingapp.model.Account;
+import com.example.bankingapp.model.Transfer;
+import com.example.bankingapp.service.AccountService;
+import com.example.bankingapp.service.TransferService;
+import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.*;
+
+import java.math.BigDecimal;
+import java.net.URI;
+import java.util.ArrayList;
+import java.util.UUID;
+
+@Controller
+@RequestMapping("/accounts")
+public class AccountController {
+
+    private final AccountService accountService;
+    private final TransferService transferService;
+
+    public AccountController(AccountService accountService, TransferService transferService) {
+        this.accountService = accountService;
+        this.transferService = transferService;
+    }
+
+    @PostMapping(consumes = "application/json", produces = "application/json")
+    @ResponseBody
+    public ResponseEntity<Account> create(@Valid Account account) {
+
+        if(account.getBalance().compareTo(BigDecimal.ZERO) < 0)
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
+
+        Account created = accountService.createAccount(account);
+        return ResponseEntity.created(URI.create("/books/" + created.getId())).body(created);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Account> getById(@PathVariable UUID id) {
+        if(accountService.getById(id) == null)
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+
+        return ResponseEntity.ok(accountService.getById(id));
+    }
+
+    @GetMapping
+    public ArrayList<Account> getAll() {
+        return accountService.getAll();
+    }
+
+    @GetMapping("/{id}/transfers")
+    public ArrayList<Transfer> getTransfersByAccountId(@PathVariable UUID id) {
+        Account account = accountService.getById(id);
+        if(account == null)
+            return null;
+
+        return transferService.getAllForAccount(account);
+    }
+
+}
