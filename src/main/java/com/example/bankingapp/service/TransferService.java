@@ -24,7 +24,7 @@ public class TransferService {
         Account source = accountService.getById(request.getSource().getId());
         Account target = accountService.getById(request.getTarget().getId());
 
-        if (source.getBalance().compareTo(request.getAmount()) > 0)
+        if (source.getBalance().compareTo(request.getAmount()) < 0)
             throw new InsufficientFundsException("Source account doesn't have enough funds.");
 
         accountService.updateBalance(source.getId(), source.getBalance().subtract(request.getAmount()));

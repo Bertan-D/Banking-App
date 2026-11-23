@@ -27,6 +27,6 @@ public class TransferController {
 
         Transfer created = transferService.create(request);
 
-        return ResponseEntity.created(URI.create("/transfers" + created.getId())).body(created);
+        return ResponseEntity.created(URI.create("/transfers/" + created.getId())).body(created);
     }
 }
